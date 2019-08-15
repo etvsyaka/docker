@@ -2,7 +2,7 @@ FROM php:7.2-fpm-alpine
 
 RUN apk update \
     && apk add  --no-cache git bash mysql-client curl libmcrypt libmcrypt-dev openssh-client icu-dev \
-    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf \
+    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf nodejs npm \
     && docker-php-source extract \
     && pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
