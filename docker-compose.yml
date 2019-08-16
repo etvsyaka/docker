@@ -34,4 +34,4 @@ services:
         environment:
           - PMA_HOST=mysql
           - PMA_USER=root
-          - PMA_PASSWORD=symf0ny
+          - PMA_PASSWORD=symfony

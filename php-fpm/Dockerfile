@@ -2,7 +2,7 @@ FROM php:7.2-fpm-alpine
 
 RUN apk update \
     && apk add  --no-cache git bash mysql-client curl libmcrypt libmcrypt-dev openssh-client icu-dev \
-    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf nodejs npm \
+    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf nodejs npm wkhtmltopdf \
     && docker-php-source extract \
     && pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
@@ -14,6 +14,7 @@ RUN apk update \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer \
     && rm -rf /tmp/*
 
 CMD ["php-fpm", "-F"]
