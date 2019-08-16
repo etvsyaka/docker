@@ -27,6 +27,16 @@ services:
             MYSQL_ROOT_PASSWORD: symfony
         ports:
             - "3333:3306"
+    rabbitmq:
+        image: rabbitmq:3-management
+        environment:
+            RABBITMQ_DEFAULT_USER: iconx
+            RABBITMQ_DEFAULT_PASS: symfonyapp
+        ports:
+            - "15672:15672"
+        restart: always
+        volumes:
+            - rabbitmq-data:/var/lib/rabbitmq
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
