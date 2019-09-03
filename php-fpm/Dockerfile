@@ -1,6 +1,6 @@
 FROM php:7.3-fpm
 
-RUN apt update && apt install -y nodejs vim
+RUN apt update && apt install -y vim
 
 RUN apt-get update && apt-get install -y --fix-missing \
     apt-utils \
@@ -15,7 +15,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev
 RUN docker-php-ext-install zip
 
-RUN apt-get update && apt-get install -y git curl libxml2-dev libmcrypt-dev openssh-client g++ \
+RUN apt install -y nodejs npm libxml2-dev
+
+RUN apt-get update && apt-get install -y git curl wget libmcrypt-dev openssh-client g++ \
     && docker-php-source extract \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
@@ -27,9 +29,16 @@ RUN apt-get update && apt-get install -y git curl libxml2-dev libmcrypt-dev open
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer \
     && rm -rf /tmp/*
 
 RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
+
+RUN ssh-keygen -t rsa -b 4096 -C "pass" -f /root/.ssh/id_rsa
+
+RUN git config --global user.name "John Doe"
+RUN git config --global user.email johndoe@example.com
+RUN git config --global core.editor vim
 
 WORKDIR /var/www/iconx
 

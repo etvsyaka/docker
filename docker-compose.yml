@@ -28,8 +28,6 @@ services:
             MYSQL_ROOT_PASSWORD: symfony
         ports:
             - "3333:3306"
-        volumes:
-            - ./mysql:/var/lib/mysql
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
@@ -37,4 +35,4 @@ services:
         environment:
           - PMA_HOST=mysql
           - PMA_USER=root
-          - PMA_PASSWORD=symf0ny
+          - PMA_PASSWORD=symfony
