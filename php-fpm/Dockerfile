@@ -1,23 +1,43 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.3-fpm
 
-RUN apk update \
-    && apk add  --no-cache git bash mysql-client curl libmcrypt libmcrypt-dev openssh-client icu-dev \
-    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf nodejs npm \
+RUN apt update && apt install -y nodejs vim
+
+RUN apt-get update && apt-get install -y --fix-missing \
+    apt-utils \
+    gnupg
+
+RUN echo "deb http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
+RUN echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list
+RUN curl -sS --insecure https://www.dotdeb.org/dotdeb.gpg | apt-key add -
+
+RUN apt-get update && apt-get install -y \
+    zlib1g-dev \
+    libzip-dev
+RUN docker-php-ext-install zip
+
+RUN apt-get update && apt-get install -y git curl libxml2-dev libmcrypt-dev openssh-client g++ \
     && docker-php-source extract \
-    && pecl install xdebug redis \
-    && docker-php-ext-enable xdebug redis \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
     && docker-php-source delete \
     && docker-php-ext-install pdo_mysql soap intl zip \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_port=10000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
 
-CMD ["php-fpm", "-F"]
+RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
 
 WORKDIR /var/www/iconx
 
+# Добавим свой php.ini, можем в нем определять свои значения конфига
+ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
+# Указываем рабочую директорию для PHP
 EXPOSE 9000
+# Запускаем контейнер
+# Из документации: The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable,
+# or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
+CMD ["php-fpm"]

@@ -11,6 +11,7 @@ services:
             - mysql
     web:
         image: nginx:latest
+        container_name: nginx_server
         ports:
             - "80:80"
         volumes:
@@ -27,6 +28,8 @@ services:
             MYSQL_ROOT_PASSWORD: symfony
         ports:
             - "3333:3306"
+        volumes:
+            - ./mysql:/var/lib/mysql
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         ports:
