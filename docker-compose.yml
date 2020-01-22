@@ -5,7 +5,7 @@ services:
         container_name: app_php
         build: ./php-fpm
         volumes:
-            - ./../:/var/www/iconx
+            - ./../:/var/www/symfony
             - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
         depends_on:
             - mysql
@@ -15,8 +15,8 @@ services:
         ports:
             - "80:80"
         volumes:
-            - ./../:/var/www/iconx
-            - ./nginx/iconx.conf:/etc/nginx/conf.d/default.conf
+            - ./../:/var/www/symfony
+            - ./nginx/symfony.conf:/etc/nginx/conf.d/default.conf
             - ./nginx/logs/:/var/log/nginx/
         links:
             - php
