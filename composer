@@ -9,6 +9,7 @@ if [ "$task" = "up" ]
     eval "docker-compose build"
   elif [ "$task" = "down" ]; then
     eval "docker-compose down"
-  elif [ "$task" = "run"]; then
+  elif [ "$task" = "run" ]; then
+    eval "docker-compose up -d"
     eval "docker exec -it app_php /bin/bash"
  fi

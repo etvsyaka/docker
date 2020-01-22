@@ -11,6 +11,7 @@ services:
             - mysql
     web:
         image: nginx:latest
+        container_name: nginx_server
         ports:
             - "80:80"
         volumes:
@@ -34,4 +35,4 @@ services:
         environment:
           - PMA_HOST=mysql
           - PMA_USER=root
-          - PMA_PASSWORD=symf0ny
+          - PMA_PASSWORD=symfony
