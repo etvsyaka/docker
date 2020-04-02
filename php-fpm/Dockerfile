@@ -37,7 +37,6 @@ RUN apt-get update && apt-get install -y git curl wget libmcrypt-dev openssh-cli
     && rm -rf /tmp/*
 
 RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
-
 RUN apt-get update -y && apt-get install -y sendmail libpng-dev
 
 RUN apt-get update && \
@@ -45,12 +44,10 @@ RUN apt-get update && \
         zlib1g-dev
 
 RUN docker-php-ext-install mbstring
-
 RUN docker-php-ext-install zip
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
-
 
 RUN ssh-keygen -t rsa -b 4096 -C "pass" -f /root/.ssh/id_rsa
 
@@ -58,13 +55,10 @@ RUN git config --global user.name "John Doe"
 RUN git config --global user.email johndoe@example.com
 RUN git config --global core.editor vim
 
-WORKDIR /var/www/iconx
+RUN echo 'alias symfony="php bin/console"' >> ~/.bashrc
+WORKDIR /var/www/symfony
 
-# Добавим свой php.ini, можем в нем определять свои значения конфига
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
-# Указываем рабочую директорию для PHP
 EXPOSE 9000
-# Запускаем контейнер
-# Из документации: The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable,
-# or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
+
 CMD ["php-fpm"]
