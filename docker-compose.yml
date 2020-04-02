@@ -1,6 +1,7 @@
 version: '2'
 
 services:
+
     php:
         container_name: app_php
         build: ./php-fpm
@@ -9,6 +10,7 @@ services:
             - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
         depends_on:
             - mysql
+
     web:
         image: nginx:latest
         container_name: nginx_server
@@ -22,9 +24,60 @@ services:
             - php
         depends_on:
             - php
+
     mysql:
-        image: mysql:5.7
+        image: mysql:latest
         environment:
             MYSQL_ROOT_PASSWORD: symfony
         ports:
             - "3333:3306"
+
+    redis:
+        container_name: container_redis
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+
+    rabbit:
+        container_name: container_rabbit
+        hostname: rabbit
+        image: rabbitmq:3-management
+        environment:
+            RABBITMQ_DEFAULT_USER: rabbitmq
+            RABBITMQ_DEFAULT_PASS: rabbitmq_password
+        volumes:
+            - ./data/rabbitmq/:/var/lib/rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+    elk:
+        container_name: container_elk
+        image: sebp/elk
+        volumes:
+            - ./elastic/logstash:/etc/logstash
+            - ./elastic/logstash/patterns:/opt/logstash/patterns
+            - ./data/elasticsearch:/var/lib/elasticsearch
+#          - ./elk/elasticsearch:/etc/elasticsearch # to place elastisearch.yml configuration
+        volumes_from:
+            - php
+            - web
+        ports:
+            - "5601:5601"
+            - "9200:9200"
+            - "5044:5044"
+
+    mailcatcher:
+        image: dockage/mailcatcher:0.7.1
+        ports:
+            - "1080:1080"
+            - "1025:1025"
+            
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        ports:
+            - "8890:801"
+        environment:
+          - PMA_HOST=mysql
+          - PMA_USER=root
+          - PMA_PASSWORD=symfony

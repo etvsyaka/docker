@@ -1,26 +1,42 @@
 #!/usr/bin/env bash
+echo "$DEBUG_MODE";
+
+if [ "$DEBUG_MODE" = 0 ] 
+  then
+    eval 'echo "$DEBUG_MODE"';
+  fi;
 
 task=$1
 option=$2
 
 if [ "$task" = "start" ]
  then
-    eval "docker-compose -f docker-compose.dev.yml up -d"
+    if [ "$DEBUG_MODE" = 1 ]
+    then
+      eval "docker-compose up -d";
+    else
+      eval "docker-compose -f docker-compose-prod.yml up -d";
+    fi;
   elif [ "$task" = "stop" ]; then
-    eval "docker-compose down"
+    eval "docker-compose down";
   elif [ "$task" = "build" ]; then
-    eval "docker-compose -f docker-compose.dev.yml build -d"
+    if [ "$DEBUG_MODE" = 1 ] 
+    then
+      eval "docker-compose up -d";
+    else
+      eval "docker-compose -f docker-compose-prod.yml build -d";
+    fi;
   elif [ "$task" = "restart" ]; then
-    eval "docker-compose restart"
+    eval "docker-compose restart";
   elif [ "$task" = "status" ]; then
-    eval "docker ps"
+    eval "docker ps";
   elif [ "$task" = "bash" ]; then
-    eval "docker exec -it app_php /bin/bash"
+    eval "docker exec -it app_php /bin/bash";
   elif [ "$task" = "test" ]; then
     if [ "$option" = "coverage" ]; then
         eval "docker exec -ti app_php ./var/www/symfony/phpunit  \
         -c ./var/www/symfony/phpunit.xml.dist \
-        --coverage-html /var/www/symfony/docs/coverage/"
+        --coverage-html /var/www/symfony/docs/coverage/";
     else
         eval "docker exec -ti app_php ./var/www/symfony/phpunit  \
         -c ./var/www/symfony/phpunit.xml.dist";

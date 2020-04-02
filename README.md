@@ -1,7 +1,8 @@
-# Docker Compose config and cli tool
+# Docker containers VS. Bash scripting
 
-## Repository includes such services as:
- * Nginx
+## In this docker-compose project contains such containers as:
+
+ * nginx:latest
  * MySQL
  * PHP 7.3
  * PhpMyAdmin
@@ -35,6 +36,48 @@ Dockerfile.
 
 ## Content
 
+#### Installation
+
+1. First go to the root folder of project which you'll be dockerized
+2. Open terminal there and run command:
+
+```
+vasyltarasov@Vasyls-MBP ~ % git clone git@github.com:etvsyaka/docker.git
+Cloning into 'docker'...
+........................
+
+vasyltarasov@Vasyls-MBP ~ % cd docker/
+
+vasyltarasov@Vasyls-MBP ~ % ./bin/containers.bash build
+vasyltarasov@Vasyls-MBP ~ % ./bin/containers.bash start
+vasyltarasov@Vasyls-MBP ~ % ./bin/containers.bash bash
+```
+
+3. After containers was builded and runed we need to edit /etc/hosts file
+
+```
+sudo vim /etc/hosts
+
+# Add after first lines this:
+
+127.0.0.1						symfony.loc, www.symfony.loc
+```
+
+4. Now you can access your app via address http://symfony.loc/
+5. PhpMyAdmin locates at http://localhost:801 
+6. Default settings is:
+
+```
+ServerAddress: symfony.loc/
+
+
+MySQL Root User: 'root'
+MySQL Root Password: 'symfony'
+
+RabbitMQ User: 'rabbitmq'
+RabbitMQ User Password: 'rabbitmq_password'
+```
+
 #### One ring for rule... | One script for control...
 
 Run vca.bash without any parameters. Actually it's quite useless example because in this case 
@@ -43,7 +86,7 @@ script will do nothing.
 ```
 //you're in root of your repository
 vasyltarasov@Vasyls-MBP toplist% cd docker/
-./vca.bash
+./bin/containers.bash
 ```
 
 #### Control status of Docker-compose containers
@@ -52,19 +95,19 @@ Script provides basic commands to control containers status.
 
 ```
 # Run all containers
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash start
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash start
 
 # Stop all continaers
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash stop
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash stop
 
 # Restart all containers
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash restart
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash restart
 
 # Build containers 
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash build 
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash build 
 
 # Containers status 
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash status
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash status
 ```
 
 #### PHPUnit
@@ -73,10 +116,10 @@ PHP Unit tests must run from container so it's possible to do by these commands.
 
 ```
 # It will run tests without coverage
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash test
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash test
 
 # It's possible to set second paramter to run tests with coverage
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash test coverage
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash test coverage
 ```
 
 #### It's bigger inside than outside | Inside container
@@ -85,7 +128,7 @@ If you need to go inside container with PHP to change something or just to take 
 need to run this command.
 
 ```
-vasyltarasov@Vasyls-MBP toplist % ./vca.bash ssh
+vasyltarasov@Vasyls-MBP toplist % ./bin/containers.bash ssh
 # ... after it you'll get inside container as root user
 ```
 
