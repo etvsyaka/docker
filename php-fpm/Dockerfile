@@ -60,10 +60,8 @@ RUN git config --global user.name "Vasyl Tarasov"
 RUN git config --global user.email vasiltarasov704@gmail.com
 RUN git config --global core.editor vim
 
-COPY ./php-fpm/php.ini /etc/php/7.3/apache2/php.ini
-COPY ./php-fpm/php.ini /etc/php/7.3/cli/php.ini
-
-COPY ./php-fpm/conf.d/* /etc/php/7.3/apache2/conf.d/
+COPY ./php.ini /etc/php/7.3/apache2/php.ini
+COPY ./conf.d/* /etc/php/7.3/apache2/conf.d/
 
 RUN echo 'alias symfony="php bin/console"' >> ~/.bashrc
 RUN echo 'alias please="sudo"' >> ~/.bashrc
