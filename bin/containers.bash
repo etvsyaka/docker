@@ -1,10 +1,4 @@
 #!/usr/bin/env bash
-echo "$DEBUG_MODE";
-
-if [ "$DEBUG_MODE" = 0 ] 
-  then
-    eval 'echo "$DEBUG_MODE"';
-  fi;
 
 task=$1
 option=$2
@@ -32,15 +26,6 @@ if [ "$task" = "start" ]
     eval "docker ps";
   elif [ "$task" = "bash" ]; then
     eval "docker exec -it app_php /bin/bash";
-  elif [ "$task" = "test" ]; then
-    if [ "$option" = "coverage" ]; then
-        eval "docker exec -ti app_php ./var/www/symfony/phpunit  \
-        -c ./var/www/symfony/phpunit.xml.dist \
-        --coverage-html /var/www/symfony/docs/coverage/";
-    else
-        eval "docker exec -ti app_php ./var/www/symfony/phpunit  \
-        -c ./var/www/symfony/phpunit.xml.dist";
-    fi;
   elif [ "$task" = "composer-install" ]; then
     eval "docker exec -it app_php php /var/www/symfony/composer.phar install";
   elif [ "$task" = "composer-require" ]; then
