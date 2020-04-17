@@ -26,10 +26,4 @@ if [ "$task" = "start" ]
     eval "docker ps";
   elif [ "$task" = "bash" ]; then
     eval "docker exec -it app_php /bin/bash";
-  elif [ "$task" = "composer-install" ]; then
-    eval "docker exec -it app_php php /var/www/symfony/composer.phar install";
-  elif [ "$task" = "composer-require" ]; then
-    eval "docker exec -it app_php php /var/www/symfony/composer.phar require $option";
-  elif [ "$task" = "composer-update" ]; then
-    eval "docker exec -it app_php php /var/www/symfony/composer.phar update";
- fi;
+    fi;
